@@ -20,10 +20,10 @@ const files = &[_][]const u8 {
 };
 
 const flags = &[_][]const u8 {
-    "-O3",
-    "-ffast-math",
+//    "-O3",
+//    "-ffast-math",
     "-std=c++17",
-    "-march=x86-64",
+//    "-march=x86-64",
     "-Wall",
     "-fsigned-char",
     "-D_GLIBCXX_USE_CXX11_ABI=0"
@@ -42,14 +42,14 @@ pub fn build(b: *std.build.Builder) void {
 
     imprimis.linkLibC();
     imprimis.linkLibCpp();
+    imprimis.linkSystemLibrary("primis");
+    imprimis.linkSystemLibrary("enet");
     imprimis.linkSystemLibrary("z");
     imprimis.linkSystemLibrary("GL");
     imprimis.linkSystemLibrary("SDL2");
     imprimis.linkSystemLibrary("SDL2_image");
     imprimis.linkSystemLibrary("SDL2_mixer");
     imprimis.linkSystemLibrary("X11");
-    imprimis.linkSystemLibrary("primis");
-    imprimis.linkSystemLibrary("enet");
 
     imprimis.setBuildMode(mode);
     imprimis.install();
