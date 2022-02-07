@@ -20,13 +20,13 @@ const files = &[_][]const u8 {
 };
 
 const flags = &[_][]const u8 {
-//    "-O3",
-//    "-ffast-math",
+    "-O3",
+    "-ffast-math",
     "-std=c++17",
-//    "-march=x86-64",
+    "-march=x86-64",
     "-Wall",
     "-fsigned-char",
-    "-D_GLIBCXX_USE_CXX11_ABI=0"
+//    "-D_GLIBCXX_USE_CXX11_ABI=0"
 };
 
 pub fn build(b: *std.build.Builder) void {
