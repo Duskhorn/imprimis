@@ -172,7 +172,7 @@ const struct gamemodeinfo
 } gamemodes[] =
 //list of valid game modes with their name/prettyname/game flags/desc
 {
-    { "demo", "Demo", Mode_Demo | Mode_LocalOnly, NULL},
+    { "demo", "Demo", Mode_Demo | Mode_LocalOnly, nullptr},
     { "edit", "Edit", Mode_Edit | Mode_All, "Cooperative Editing:\nEdit maps with multiple players simultaneously." },
     { "tdm", "TDM", Mode_Team | Mode_All, "Team Deathmatch: fight for control over the map" },
 };
@@ -561,7 +561,7 @@ struct gamestate
     int aitype, skill;
     int combatclass;
 
-    gamestate() : maxhealth(1), aitype(AI_None), skill(0)
+    gamestate() : maxhealth(10), aitype(AI_None), skill(0)
     {
         for(int i = 0; i < Gun_NumGuns; i++)
         {
@@ -689,8 +689,8 @@ struct gameent : dynent, gamestate
     gameent() : weight(100), clientnum(-1), privilege(Priv_None), lastupdate(0),
                 plag(0), ping(0), lifesequence(0), respawned(-1), suicided(-1),
                 lastpain(0), frags(0), deaths(0), totaldamage(0),
-                totalshots(0), edit(NULL), smoothmillis(-1), team(0),
-                playermodel(-1), playercolor(0), ai(NULL), ownernum(-1),
+                totalshots(0), edit(nullptr), smoothmillis(-1), team(0),
+                playermodel(-1), playercolor(0), ai(nullptr), ownernum(-1),
                 sprinting(1), muzzle(-1, -1, -1)
     {
         name[0] = info[0] = 0;
@@ -796,7 +796,28 @@ namespace entities
     extern void putitems(packetbuf &p);
     extern void setspawn(int i, bool on);
 }
+
+enum
+{
+    Edit_Face = 0,
+    Edit_Tex,
+    Edit_Mat,
+    Edit_Flip,
+    Edit_Copy,
+    Edit_Paste,
+    Edit_Rotate,
+    Edit_Replace,
+    Edit_DelCube,
+    Edit_AddCube,
+    Edit_CalcLight,
+    Edit_Remip,
+    Edit_VSlot,
+    Edit_Undo,
+    Edit_Redo
+};
+
 extern void mpeditent(int i, const vec &o, int type, int attr1, int attr2, int attr3, int attr4, int attr5, bool local);
+extern void entdrag(const vec &ray);
 
 extern void modifygravity(gameent *pl, bool water, int curtime);
 extern void moveplayer(gameent *pl, int moveres, bool local);
@@ -849,14 +870,14 @@ namespace game
     extern int smoothmove, smoothdist;
 
     extern bool allowedittoggle(bool message = true);
-    extern void edittrigger(const selinfo &sel, int op, int arg1 = 0, int arg2 = 0, int arg3 = 0, const VSlot *vs = NULL);
+    extern void edittrigger(const selinfo &sel, int op, int arg1 = 0, int arg2 = 0, int arg3 = 0, const VSlot *vs = nullptr);
     extern gameent *getclient(int cn);
     extern gameent *newclient(int cn);
-    extern const char *colorname(gameent *d, const char *name = NULL, const char *alt = NULL, const char *color = "");
+    extern const char *colorname(gameent *d, const char *name = nullptr, const char *alt = nullptr, const char *color = "");
     extern const char *teamcolorname(gameent *d, const char *alt = "you");
     extern const char *teamcolor(const char *prefix, const char *suffix, int team, const char *alt);
-    extern void teamsound(bool sameteam, int n, const vec *loc = NULL);
-    extern void teamsound(gameent *d, int n, const vec *loc = NULL);
+    extern void teamsound(bool sameteam, int n, const vec *loc = nullptr);
+    extern void teamsound(gameent *d, int n, const vec *loc = nullptr);
     extern gameent *pointatplayer();
     extern gameent *hudplayer();
     extern gameent *followingplayer();
@@ -871,7 +892,7 @@ namespace game
     extern void damaged(int damage, gameent *d, gameent *actor, bool local = true);
     extern void killed(gameent *d, gameent *actor);
     extern void timeupdate(int timeremain);
-    extern void msgsound(int n, physent *d = NULL);
+    extern void msgsound(int n, physent *d = nullptr);
     extern void drawicon(int icon, float x, float y, float sz = 120);
     const char *mastermodecolor(int n, const char *unknown);
     const char *mastermodeicon(int n, const char *unknown);
@@ -895,7 +916,7 @@ namespace game
     extern void ignore(int cn);
     extern void unignore(int cn);
     extern bool isignored(int cn);
-    extern bool addmsg(int type, const char *fmt = NULL, ...);
+    extern bool addmsg(int type, const char *fmt = nullptr, ...);
     extern void switchname(const char *name);
     extern void switchteam(const char *name);
     extern void sendmapinfo();
@@ -1072,7 +1093,7 @@ extern servinfo *getservinfo(int i);
 
 extern bool resolverwait(const char *name, ENetAddress *address);
 extern int connectwithtimeout(ENetSocket sock, const char *hostname, const ENetAddress &address);
-extern void addserver(const char *name, int port = 0, const char *password = NULL, bool keep = false);
+extern void addserver(const char *name, int port = 0, const char *password = nullptr, bool keep = false);
 extern void writeservercfg();
 
 namespace server

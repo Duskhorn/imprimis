@@ -284,7 +284,8 @@ namespace ai
     {
         if(aiplayer->ai)
         {
-            DELETEP(aiplayer->ai);
+            delete aiplayer->ai;
+            aiplayer->ai = nullptr;
         }
     }
 
@@ -764,7 +765,7 @@ namespace ai
 
     bool waypointai::isenemy(aistate &b, const vec &pos, float guard, int pursue)
     {
-        gameent *t = NULL;
+        gameent *t = nullptr;
         vec dp = aiplayer->headpos();
         float mindist = guard*guard,
               bestdist = 1e16f;
@@ -863,7 +864,7 @@ namespace ai
         while(true)
         {
             float dist = 1e16f;
-            gameent *t = NULL;
+            gameent *t = nullptr;
             int atk = guns[aiplayer->gunselect].attacks[Act_Shoot];
             for(int i = 0; i < players.length(); i++)
             {
@@ -1171,7 +1172,7 @@ namespace ai
             }
             else if(!enemyok && istarget(b, 0, false, sightmin))
             {
-                enemyok = (e = getclient(enemy)) != NULL;
+                enemyok = (e = getclient(enemy)) != nullptr;
             }
         }
         if(enemyok)
@@ -1483,10 +1484,11 @@ namespace ai
         {
             if(allowmove)
             {
-                if(!request(b)) istarget(b, 0, b.idle ? true : false);
+                if(!request(b))
                 {
-                    shoot(aiplayer, target);
+                    istarget(b, 0, b.idle ? true : false);
                 }
+                shoot(aiplayer, target);
             }
             if(!intermission)
             {

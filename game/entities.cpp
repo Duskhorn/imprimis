@@ -861,7 +861,7 @@ void renderentselection(const vec &o, const vec &ray, bool entmoving)
         boxs3D(eo, es, 1);
         gle::colorub(200,0,0);
         boxs(entorient, eo, es);
-        boxs(entorient, eo, es, std::clamp(0.015f*camera1->o.dist(eo)*tan(fovy*0.5f*RAD), 0.1f, 1.0f));
+        boxs(entorient, eo, es, std::clamp(static_cast<float>(0.015f*camera1->o.dist(eo)*tan(fovy*0.5f*RAD)), 0.1f, 1.0f));
     }
 
     if(showentradius)
@@ -1342,6 +1342,43 @@ void mpeditent(int i, const vec &o, int type, int attr1, int attr2, int attr3, i
     entities::editent(i, local);
     clearshadowcache();
     commitchanges();
+}
+
+void entdrag(const vec &ray)
+{
+    if(noentedit() || !haveselent())
+    {
+        return;
+    }
+    float r = 0,
+          c = 0;
+    static vec dest, handle;
+    vec eo, es;
+    int d = DIMENSION(entorient),
+        dc= DIM_COORD(entorient);
+
+    ENT_FOCUS(entgroup.last(),
+        entselectionbox(e, eo, es);
+
+        if(!editmoveplane(e.o, ray, d, eo[d] + (dc ? es[d] : 0), handle, dest, entmoving==1))
+        {
+            return;
+        }
+        ivec g(dest);
+        int z = g[d]&(~(sel.grid-1));
+        g.add(sel.grid/2).mask(~(sel.grid-1));
+        g[d] = z;
+
+        r = (entselsnap ? g[R[d]] : dest[R[d]]) - e.o[R[d]];
+        c = (entselsnap ? g[C[d]] : dest[C[d]]) - e.o[C[d]];
+    );
+
+    if(entmoving==1)
+    {
+        makeundoent();
+    }
+    GROUP_EDIT_PURE(e.o[R[d]] += r; e.o[C[d]] += c);
+    entmoving = 2;
 }
 
 COMMAND(newent, "siiiii");

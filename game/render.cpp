@@ -861,6 +861,10 @@ namespace game
                 sel.o[C[od]] = o[C[od]];
             }
         }
+        else if(entmoving)
+        {
+            entdrag(camdir);
+        }
         else
         {
             ivec w;
@@ -932,7 +936,7 @@ namespace game
 
                 if(hmapedit==1 && DIM_COORD(horient) == (camdir[DIMENSION(horient)]<0))
                 {
-                    hmapsel = hmap::isheightmap(horient, DIMENSION(horient), false, c);
+                    hmapsel = hmap::isheightmap(horient, DIMENSION(horient), false, *c);
                     if(hmapsel)
                     {
                         od = DIMENSION(orient = horient);

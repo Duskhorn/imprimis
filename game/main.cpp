@@ -81,7 +81,7 @@ void updateenginevalues()
     dynents = dyns;
 }
 
-constexpr const char * versionstring = "Alpha 14 \"Northstar\"";
+constexpr const char * versionstring = "Alpha 15 \"Osceola\"";
 
 //sets engine constants that need information from the game
 //as a result, all values set here are global variables defined elsewhere in
@@ -232,6 +232,9 @@ int main(int argc, char **argv)
     initparticles();
     initstains();
     identflags |= Idf_Persist;
+
+    logoutf("init: ui");
+    UI::inituicmds();
     logoutf("init: mainloop");
     resetfpshistory();
     inputgrab(grabinput = true);
